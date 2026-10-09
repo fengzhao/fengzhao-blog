@@ -1,0 +1,63 @@
+/* ============================================================================
+   Shiki 代码高亮样式
+   ----------------------------------------------------------------------------
+   代码块由 scripts/shikify.mjs 在构建期用 Shiki 渲染，输出形如：
+
+     <pre class="shiki shiki-themes night-owl-light night-owl"
+          style="background-color:#fbfbfb;--shiki-dark-bg:#011627;color:#403f53;--shiki-dark:#d6deeb">
+       <code><span class="line"><span style="color:#4876d6;--shiki-dark:#82AAFF">…</span></span></code>
+     </pre>
+
+   颜色以 CSS 变量形式内联，本文件按 PaperMod 的 data-theme 属性在
+   night-owl-light（亮）与 night-owl（暗）之间切换。
+   ============================================================================ */
+
+/* ---------- 1. 语法着色：两套主题变量切换 ---------- */
+.shiki span {
+    color: var(--shiki-light);
+    font-style: var(--shiki-light-font-style);
+    font-weight: var(--shiki-light-font-weight);
+    text-decoration: var(--shiki-light-text-decoration);
+}
+
+:root[data-theme="dark"] .shiki span {
+    color: var(--shiki-dark);
+    font-style: var(--shiki-dark-font-style);
+    font-weight: var(--shiki-dark-font-weight);
+    text-decoration: var(--shiki-dark-text-decoration);
+}
+
+/* ---------- 2. 代码块容器 ----------
+   PaperMod 原本靠 .highlight 包裹层提供背景/圆角/外边距，
+   关掉 Chroma 后该层不存在了，这里补齐。 */
+.md-content pre.shiki {
+    margin: 0 0 var(--content-gap);
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    overflow-x: auto;
+    direction: ltr;
+    font-size: 14px;
+    line-height: 1.6;
+    /* 亮色背景：Shiki 内联样式已给出同值，这里显式加固 */
+    background-color: var(--shiki-light-bg, #fbfbfb) !important;
+}
+
+:root[data-theme="dark"] .md-content pre.shiki {
+    background-color: var(--shiki-dark-bg, #011627) !important;
+}
+
+/* ---------- 3. 让出 PaperMod 给 code 设的不透明背景与内边距 ----------
+   主题里 .md-content pre code 有 background: var(--code-block-bg) !important，
+   会盖住 Shiki 的配色，必须用更高特异性的规则顶掉。 */
+.md-content pre.shiki code {
+    display: block;
+    margin: 0;
+    padding: 0;
+    background: transparent !important;
+    color: inherit !important;
+    border-radius: 0;
+    font-size: inherit;
+    line-height: inherit;
+    overflow-x: visible;
+    word-break: normal;
+}

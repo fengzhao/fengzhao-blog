@@ -49,8 +49,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-hugo-
 
-      - name: Build
+      # ---- Shiki 代码高亮（构建后处理）----
+      # Hugo 只负责输出未着色的 <pre><code>（hugo.toml 里 codeFences = false），
+      # 着色交给 Shiki，脚本见 scripts/shikify.mjs
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build (Hugo)
         run: hugo --minify --gc
+
+      - name: Apply Shiki syntax highlighting
+        run: node scripts/shikify.mjs
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4

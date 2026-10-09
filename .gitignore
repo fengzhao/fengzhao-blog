@@ -22,3 +22,6 @@ Gemfile.lock
 /public/
 /resources/_gen/
 .hugo_build.lock
+
+# ---- Node（Shiki 代码高亮后处理，见 scripts/shikify.mjs）----
+/node_modules/

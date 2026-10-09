@@ -191,12 +191,19 @@ googleAnalytics = ''                           # 【改】填 GA4 的 G-XXXXXXXX
     weight = 50
 
 # ==============================================================================
-#  代码高亮
-#  PaperMod 自带 chroma 样式，必须让 noClasses = false（类名高亮）才会生效
-#  （旧写法 pygmentsUseClasses 已废弃，不要再加）
+#  代码高亮 —— 交给 Shiki（构建后处理，见 scripts/shikify.mjs）
+#
+#  Hugo 只支持内置的 Chroma（Go 实现），无法使用 Shiki（JS / TextMate 语法）。
+#  因此这里关掉 Chroma，让 Hugo 只输出未着色的原始代码块：
+#      <pre><code class="language-xxx">...</code></pre>
+#  构建完成后由 `node scripts/shikify.mjs` 扫描 public/ 下的 HTML，
+#  用 Shiki 原地重新渲染（零客户端 JS，与 dejavu 的做法一致）。
+#
+#  ⚠️ 本地预览请用 `npm run build`（hugo build + shikify），
+#     单跑 `hugo server` 只会显示未着色的代码块。
 # ==============================================================================
 [markup.highlight]
-  noClasses = false
+  codeFences = false
 
 # ==============================================================================
 #  隐私：第三方嵌入内容（默认全部禁用，避免被追踪）

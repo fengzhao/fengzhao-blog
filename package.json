@@ -1,0 +1,14 @@
+{
+  "name": "fengzhao-blog",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Hugo 博客构建辅助工具链（Shiki 代码高亮后处理）",
+  "scripts": {
+    "build": "hugo --minify --gc && node scripts/shikify.mjs",
+    "shikify": "node scripts/shikify.mjs"
+  },
+  "devDependencies": {
+    "shiki": "^4.5.0"
+  }
+}
