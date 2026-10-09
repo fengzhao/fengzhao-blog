@@ -1,0 +1,20 @@
+# 统一行尾为 LF —— Windows 本地编辑 + Linux CI 构建混用，避免 "LF will be replaced by CRLF" 警告
+* text=auto eol=lf
+
+# 二进制资源：禁止 Git 做文本/行尾转换
+*.woff2 binary
+*.woff  binary
+*.ttf   binary
+*.otf   binary
+*.eot   binary
+
+# 图片
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.webp binary
+
+# 矢量图是文本，保留可 diff
+*.svg text eol=lf
