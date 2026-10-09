@@ -16,3 +16,9 @@ _site/
 # counterproductive to check this file into the repository.
 # Details at https://github.com/github/pages-gem/issues/768
 Gemfile.lock
+
+# ---- Hugo ----
+# 构建产物由 GitHub Actions 生成，不需要提交
+/public/
+/resources/_gen/
+.hugo_build.lock

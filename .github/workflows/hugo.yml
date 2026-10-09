@@ -1,0 +1,76 @@
+name: Build and Deploy Hugo to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# GitHub Pages 官方部署所需的权限
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同一时间只允许一个 Pages 部署，排队执行不取消进行中的任务
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      HUGO_VERSION: 0.167.0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # PaperMod 主题是 submodule，必须递归拉取，否则构建时找不到主题
+          submodules: recursive
+          # 拉取完整历史，供 Hugo 生成 .GitInfo / lastmod
+          fetch-depth: 0
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ env.HUGO_VERSION }}
+          extended: true
+
+      - name: Cache Hugo resources
+        uses: actions/cache@v4
+        with:
+          path: |
+            resources/_gen
+            ~/.cache/hugo_cache
+          key: ${{ runner.os }}-hugo-${{ hashFiles('**/go.sum', '**/hugo.toml', '**/config.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-hugo-
+
+      - name: Build
+        run: |
+          hugo --minify --gc --baseURL "${{ steps.pages.outputs.base_url }}/"
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
