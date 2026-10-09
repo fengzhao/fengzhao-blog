@@ -58,6 +58,9 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
           publish_branch: gh-pages
+          # 自定义域名，会在发布目录写入 CNAME 文件
+          # （static/CNAME 也会随 Hugo 构建进入 public/，两者内容一致）
+          cname: blog.fengzhao.pro
           # 每次只保留一次提交，避免 gh-pages 分支历史无限膨胀
           force_orphan: true
           # 自动生成 .nojekyll，防止 GitHub Pages 用 Jekyll 处理 Hugo 产物
