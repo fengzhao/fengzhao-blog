@@ -1,3 +1,226 @@
+# ==============================================================================
+#  Hugo 站点配置 —— fengzhao-blog
+#  部署链路：GitHub Actions → gh-pages 分支 → https://blog.fengzhao.pro
+#  主题：PaperMod（要求 Hugo >= 0.146.0，CI 中固定 0.167.0）
+#  说明：标有「【改】」的项需要替换成你自己的内容
+# ==============================================================================
+
+# ------------------------------ 站点基础 ------------------------------
 baseURL = 'https://blog.fengzhao.pro/'
-locale = 'en-us'
-title = 'My New Hugo Project'
+title = 'Fengzhao Blog'                        # 【改】网站标题
+locale = 'zh'
+defaultContentLanguage = 'zh'
+hasCJKLanguage = true
+
+# ------------------------------ 构建行为 ------------------------------
+theme = 'PaperMod'
+enableRobotsTXT = true
+buildDrafts = false
+buildFuture = false
+buildExpired = false
+enableEmoji = true
+# 打开后可显示「最后更新于」，CI 里已做 fetch-depth: 0，但没有提交历史的文件会缺值
+enableGitInfo = false
+googleAnalytics = ''                           # 【改】填 GA4 的 G-XXXXXXXXXX，不用则留空
+
+# 让首页额外输出 JSON，供站内搜索（Fuse.js）检索
+[outputs]
+  home = ['HTML', 'RSS', 'JSON']
+
+# ------------------------------ 分页 ------------------------------
+# 注意：Hugo 0.146 起旧的顶层 paginate 已被移除，必须用这种写法
+[pagination]
+  pagerSize = 5                                # 【改】每页文章数
+
+# ------------------------------ 输出压缩 ------------------------------
+[minify]
+  disableXML = true
+  minifyOutput = true
+
+# ==============================================================================
+#  主题参数
+# ==============================================================================
+[params]
+  env = 'production'
+  title = 'Fengzhao Blog'                      # 【改】
+  description = 'Fengzhao 的个人博客，记录技术与生活。'   # 【改】SEO 描述
+  author = 'Fengzhao'                          # 【改】
+  keywords = ['博客', 'Fengzhao']               # 【改】
+  # OpenGraph / Twitter 预览图，需先把图片放进 static/ 目录再打开
+  # images = ['opengraph.webp']
+
+  DateFormat = '2006-01-02'
+  defaultTheme = 'auto'                        # auto / light / dark
+  disableThemeToggle = false
+
+  # 内容展示开关
+  ShowReadingTime = true
+  ShowShareButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true                   # 代码块右上角「复制」按钮
+  ShowWordCount = true
+  ShowRssButtonInSectionTermList = true
+  UseHugoToc = true
+
+  disableSpecial1stPost = false
+  disableScrollToTop = false
+  comments = false                             # 需要评论系统时再开
+  hidemeta = false
+  hideSummary = false
+  showtoc = false                              # 全局默认关闭目录，单篇文章可在 front matter 里单独开
+  tocopen = false
+
+  # ------------------------------ 文章封面 ------------------------------
+  [params.cover]
+    hidden = true
+    hiddenInList = true
+    hiddenInSingle = true
+
+  # ------------------------------ 站点图标资源 ------------------------------
+  [params.assets]
+    # disableHLJS = true
+    # disableFingerprinting = true
+    #
+    # 以下 favicon 需自行生成后放进 static/ 目录，再把注释打开
+    # 生成工具：https://realfavicongenerator.net/
+    # favicon = '/favicon.ico'
+    # favicon16x16 = '/favicon-16x16.png'
+    # favicon32x32 = '/favicon-32x32.png'
+    # apple_touch_icon = '/apple-touch-icon.png'
+    # safari_pinned_tab = '/safari-pinned-tab.svg'
+
+  # ------------------------------ 左上角 Logo ------------------------------
+  [params.label]
+    text = 'Fengzhao Blog'                     # 【改】用文字充当 Logo
+    # icon = '/apple-touch-icon.png'           # 有图片了再打开
+    iconHeight = 35
+
+  # ------------------------------ 首页：个人信息模式（默认关闭）------------------------------
+  [params.profileMode]
+    enabled = false
+    title = 'Fengzhao'                         # 【改】
+    subtitle = '记录技术与生活'                  # 【改】
+    imageUrl = ''
+    imageWidth = 120
+    imageHeight = 120
+    imageTitle = 'avatar'
+
+    [[params.profileMode.buttons]]
+      name = '文章'
+      url = 'posts'
+    [[params.profileMode.buttons]]
+      name = '标签'
+      url = 'tags'
+
+  # ------------------------------ 首页：简介模式（默认启用）------------------------------
+  [params.homeInfoParams]
+    Title = 'Hi there 👋'                       # 【改】
+    Content = '欢迎来到我的博客，这里会记录一些技术笔记和生活随想。'   # 【改】
+
+  # ------------------------------ 首页社交图标 ------------------------------
+  [[params.socialIcons]]
+    name = 'github'
+    url = 'https://github.com/fengzhao'        # 【改】换成你的 GitHub 主页
+  # [[params.socialIcons]]
+  #   name = 'x'
+  #   url = 'https://x.com/yourname'
+  # [[params.socialIcons]]
+  #   name = 'rss'
+  #   url = 'index.xml'
+
+  # ------------------------------ 站长验证 ------------------------------
+  [params.analytics]
+    [params.analytics.google]
+      SiteVerificationTag = ''
+    [params.analytics.bing]
+      SiteVerificationTag = ''
+    [params.analytics.yandex]
+      SiteVerificationTag = ''
+
+  # ------------------------------ 「在 GitHub 上编辑」按钮 ------------------------------
+  [params.editPost]
+    URL = 'https://github.com/fengzhao/fengzhao-blog/edit/main/content/posts'
+    Text = '在 GitHub 上编辑'
+    appendFilePath = true
+
+  # ------------------------------ 站内搜索（Fuse.js 参数）------------------------------
+  [params.fuseOpts]
+    isCaseSensitive = false
+    shouldSort = true
+    location = 0
+    distance = 1000
+    threshold = 0.4
+    minMatchCharLength = 0
+    keys = ['title', 'permalink', 'summary', 'content']
+
+# ==============================================================================
+#  顶部导航栏
+# ==============================================================================
+[menu]
+  [[menu.main]]
+    identifier = 'home'
+    name = '首页'
+    url = '/'
+    weight = 1
+  [[menu.main]]
+    identifier = 'posts'
+    name = '文章'
+    url = '/posts/'
+    weight = 10
+  [[menu.main]]
+    identifier = 'categories'
+    name = '分类'
+    url = '/categories/'
+    weight = 20
+  [[menu.main]]
+    identifier = 'tags'
+    name = '标签'
+    url = '/tags/'
+    weight = 30
+  # 下面两项依赖 content/archives.md 和 content/search.md，已一并创建
+  [[menu.main]]
+    identifier = 'archives'
+    name = '归档'
+    url = '/archives/'
+    weight = 40
+  [[menu.main]]
+    identifier = 'search'
+    name = '搜索'
+    url = '/search/'
+    weight = 50
+
+# ==============================================================================
+#  代码高亮
+#  PaperMod 自带 chroma 样式，必须让 noClasses = false（类名高亮）才会生效
+#  （旧写法 pygmentsUseClasses 已废弃，不要再加）
+# ==============================================================================
+[markup.highlight]
+  noClasses = false
+
+# ==============================================================================
+#  隐私：第三方嵌入内容（默认全部禁用，避免被追踪）
+# ==============================================================================
+[privacy.vimeo]
+  disabled = true
+  enableDNT = true
+  simple = true
+
+[privacy.twitter]
+  disabled = true
+  enableDNT = true
+  simple = true
+
+[privacy.instagram]
+  disabled = true
+  simple = true
+
+[privacy.youtube]
+  disabled = true
+  privacyEnhanced = true
+
+[services.instagram]
+  disableInlineCSS = true
+
+[services.twitter]
+  disableInlineCSS = true
