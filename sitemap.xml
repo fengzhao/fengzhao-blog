@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://blog.fengzhao.pro/categories/</loc>
+    <lastmod>2026-10-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.fengzhao.pro/</loc>
+    <lastmod>2026-10-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.fengzhao.pro/posts/</loc>
+    <lastmod>2026-10-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.fengzhao.pro/tags/</loc>
+    <lastmod>2026-10-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.fengzhao.pro/posts/hello-world/</loc>
+    <lastmod>2026-10-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.fengzhao.pro/categories/%E7%94%9F%E6%B4%BB/</loc>
+    <lastmod>2026-10-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.fengzhao.pro/tags/%E9%9A%8F%E7%AC%94/</loc>
+    <lastmod>2026-10-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.fengzhao.pro/archives/</loc>
+  </url><url>
+    <loc>https://blog.fengzhao.pro/search/</loc>
+  </url>
+</urlset>
