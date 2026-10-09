@@ -1,4 +1,4 @@
-name: Build and Deploy Hugo to GitHub Pages
+name: Build Hugo and Deploy to gh-pages
 
 on:
   push:
@@ -6,15 +6,13 @@ on:
       - main
   workflow_dispatch:
 
-# GitHub Pages 官方部署所需的权限
+# 需要向 gh-pages 分支推送，所以要有写权限
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
-# 同一时间只允许一个 Pages 部署，排队执行不取消进行中的任务
+# 防止两次推送同时部署，造成 gh-pages 分支冲突
 concurrency:
-  group: pages
+  group: gh-pages-deploy
   cancel-in-progress: false
 
 defaults:
@@ -22,7 +20,7 @@ defaults:
     shell: bash
 
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-latest
     env:
       HUGO_VERSION: 0.167.0
@@ -34,10 +32,6 @@ jobs:
           submodules: recursive
           # 拉取完整历史，供 Hugo 生成 .GitInfo / lastmod
           fetch-depth: 0
-
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v5
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
@@ -56,21 +50,18 @@ jobs:
             ${{ runner.os }}-hugo-
 
       - name: Build
-        run: |
-          hugo --minify --gc --baseURL "${{ steps.pages.outputs.base_url }}/"
+        run: hugo --minify --gc
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: ./public
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
+          # 每次只保留一次提交，避免 gh-pages 分支历史无限膨胀
+          force_orphan: true
+          # 自动生成 .nojekyll，防止 GitHub Pages 用 Jekyll 处理 Hugo 产物
+          enable_jekyll: false
+          user_name: github-actions[bot]
+          user_email: github-actions[bot]@users.noreply.github.com
+          commit_message: "deploy: ${{ github.event.head_commit.message }}"
